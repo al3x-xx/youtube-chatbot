@@ -1,0 +1,43 @@
+import { setIntervalAsync, clearIntervalAsync } from "set-interval-async"
+
+import { ytChat } from "./chat.js"
+import { ytMessage } from "./interface.js"
+
+export class ytChatUpdate {
+    private messageFunc: (message: ytMessage) => void
+    private endFunc: () => void
+
+    private timer: any
+
+    public constructor(private chat: ytChat) {}
+
+    public message = (f: (message: ytMessage) => void): void => {
+        this.messageFunc = f
+    }
+
+    public end = (f: () => void): void => {
+        this.endFunc = f
+    }
+
+    public start = async (delay: number): Promise<void> => {
+        const options = await this.chat.getChatOptions()
+        if (!options) return
+        this.timer = setIntervalAsync(async () => {
+            const [status, message] = await this.chat.processChat(options)
+            if (status) {
+                if (message) {
+                    for (const buf of message) {
+                        this.messageFunc(buf);
+                    }
+                }
+            } else {
+                this.stop()
+                this.endFunc()
+            }
+        }, 1000)
+    }
+
+    public stop = async (): Promise<void> => {
+        await clearIntervalAsync(this.timer)
+    }
+}
