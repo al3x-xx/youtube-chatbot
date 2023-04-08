@@ -21,7 +21,7 @@ bot.update.message(async (message) => {
     }
 })
 
-bot.update.end(async () => {
+bot.update.end(() => {
     console.log("stream end")
 })
 
