@@ -19,7 +19,7 @@ export class ytChatUpdate {
         this.endFunc = f
     }
 
-    public start = async (delay: number): Promise<void> => {
+    public start = async (): Promise<void> => {
         const options = await this.chat.getChatOptions()
         if (!options) return
         this.timer = setIntervalAsync(async () => {
