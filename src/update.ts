@@ -5,7 +5,7 @@ import { ytMessage } from "./interface.js"
 
 export class ytChatUpdate {
     private messageFunc: (message: ytMessage) => void
-    private endFunc: () => void
+    private endFunc: () => void = () => undefined
 
     private timer: any
 
